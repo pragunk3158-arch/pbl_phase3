@@ -1,0 +1,444 @@
+/* SmartWaste dashboard styles */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Segoe UI, Arial, sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 20px;
+  font-size: 14px;
+}
+
+#errorBanner {
+  display: none;
+  background: #7f1d1d;
+  color: #fecaca;
+  border: 1px solid #ef4444;
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ---------- header ---------- */
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin-bottom: 18px;
+}
+
+header h1 {
+  font-size: 22px;
+  color: #38bdf8;
+}
+
+header p {
+  color: #94a3b8;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* ---------- buttons ---------- */
+
+.btn {
+  background: #334155;
+  color: #e2e8f0;
+  border: none;
+  border-radius: 6px;
+  padding: 9px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  margin-right: 6px;
+  margin-top: 6px;
+}
+
+.btn:hover {
+  background: #475569;
+}
+
+.btn-main  { background: #0284c7; }
+.btn-green { background: #059669; }
+.btn-red   { background: #dc2626; }
+
+.btn-main:hover  { background: #0369a1; }
+.btn-green:hover { background: #047857; }
+.btn-red:hover   { background: #b91c1c; }
+
+/* ---------- summary cards ---------- */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.card-title {
+  color: #94a3b8;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.card-value {
+  font-size: 30px;
+  font-weight: bold;
+  margin: 6px 0;
+}
+
+.card-note {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.red   { color: #f87171; }
+.green { color: #34d399; }
+.blue  { color: #38bdf8; }
+
+/* ---------- tabs ---------- */
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.tab {
+  background: #1e293b;
+  color: #94a3b8;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 9px 16px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.tab.active {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #0284c7;
+}
+
+.tab-page { display: none; }
+.tab-page.active { display: block; }
+
+/* ---------- panels ---------- */
+
+.split {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 1000px) {
+  .split { grid-template-columns: 1fr; }
+}
+
+.panel {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.panel h2 {
+  font-size: 16px;
+  color: #38bdf8;
+  margin-bottom: 10px;
+}
+
+.panel-buttons { margin-bottom: 12px; }
+
+.help {
+  color: #94a3b8;
+  font-size: 12px;
+  margin: 8px 0 12px 0;
+  line-height: 1.6;
+}
+
+canvas {
+  width: 100%;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 6px;
+}
+
+/* ---------- moving trucks ---------- */
+
+.map-buttons {
+  margin-top: 10px;
+}
+
+#truckStatus {
+  font-family: Consolas, monospace;
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+/* ---------- legend ---------- */
+
+.legend {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 10px;
+}
+
+.dot, .line {
+  display: inline-block;
+  margin: 0 4px 0 12px;
+  vertical-align: middle;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.line {
+  width: 18px;
+  height: 3px;
+}
+
+.dot.depot { background: #38bdf8; }
+.dot.crit  { background: #ef4444; }
+.dot.high  { background: #f59e0b; }
+.dot.ok    { background: #10b981; }
+.line.route   { background: #10b981; }
+.line.blocked { background: #ef4444; }
+
+/* ---------- planned trips ---------- */
+
+.route-colour {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.route-title {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.route-total {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: #34d399;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* ---------- active route box ---------- */
+
+.route-box {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 14px;
+  margin-bottom: 18px;
+}
+
+.route-box p {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.route-box span { color: #94a3b8; }
+
+.route-box .status {
+  display: block;
+  margin-top: 10px;
+  padding: 7px 10px;
+  border-radius: 5px;
+  background: #334155;
+  font-size: 12px;
+}
+
+.route-box .status.warning {
+  background: #78350f;
+  color: #fcd34d;
+}
+
+.route-box .path {
+  display: block;
+  margin: 10px 0;
+  font-size: 12px;
+  color: #cbd5e1;
+  line-height: 1.8;
+  word-break: break-word;
+}
+
+.msg {
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
+  color: #34d399;
+  min-height: 16px;
+}
+
+.msg.error { color: #f87171; }
+
+/* ---------- forms ---------- */
+
+.form-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.form-row label {
+  flex: 1;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.header-select {
+  width: auto;
+  margin-top: 6px;
+}
+
+select {
+  width: 100%;
+  margin-top: 4px;
+  padding: 8px;
+  background: #0f172a;
+  color: #e2e8f0;
+  border: 1px solid #334155;
+  border-radius: 5px;
+  font-size: 13px;
+}
+
+/* ---------- tables ---------- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th {
+  text-align: left;
+  color: #94a3b8;
+  font-size: 12px;
+  text-transform: uppercase;
+  padding: 10px 8px;
+  border-bottom: 1px solid #334155;
+}
+
+td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #1e293b;
+}
+
+tr:hover td { background: #243147; }
+
+/* bins that a truck has already emptied */
+.collected-row td { color: #64748b; }
+.collected-row td strong { color: #64748b; }
+
+/* priority labels */
+
+.tag {
+  padding: 3px 9px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.tag-critical { background: #7f1d1d; color: #fecaca; }
+.tag-high     { background: #78350f; color: #fde68a; }
+.tag-medium   { background: #0c4a6e; color: #bae6fd; }
+.tag-low      { background: #064e3b; color: #a7f3d0; }
+
+/* fill level bar */
+
+.bar {
+  display: inline-block;
+  width: 70px;
+  height: 7px;
+  background: #334155;
+  border-radius: 4px;
+  margin-right: 8px;
+  vertical-align: middle;
+  overflow: hidden;
+}
+
+.bar span {
+  display: block;
+  height: 100%;
+}
+
+.fill-critical { background: #ef4444; }
+.fill-high     { background: #f59e0b; }
+.fill-medium   { background: #38bdf8; }
+.fill-low      { background: #10b981; }
+
+/* ---------- comparison ---------- */
+
+.compare-table { margin-top: 14px; }
+
+.savings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 18px;
+  text-align: center;
+}
+
+.savings p { color: #94a3b8; font-size: 12px; }
+
+.savings .big {
+  color: #34d399;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+/* ---------- test output ---------- */
+
+pre {
+  margin-top: 14px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 14px;
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #cbd5e1;
+  white-space: pre-wrap;
+}

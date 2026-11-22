@@ -1,0 +1,2 @@
+# Collection history. One line is added every time a trip is executed.
+# Format: Date Time | Vehicle | Distance | Waste | Bins

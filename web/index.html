@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartWaste Dashboard</title>
+  <link rel="stylesheet" href="style.css?v=5">
+</head>
+<body>
+
+<!-- If anything goes wrong this box becomes visible and says what happened,
+     instead of the page just staying empty. -->
+<div id="errorBanner"></div>
+
+<script>
+  // Catches any mistake in app.js and writes it on the page
+  window.onerror = function (message, file, line) {
+    var box = document.getElementById("errorBanner");
+    if (box) {
+      box.style.display = "block";
+      box.textContent = "Page error: " + message + "  (line " + line + ")" +
+        "  --  press Ctrl+F5 to reload the page properly.";
+    }
+    return false;
+  };
+</script>
+
+
+<header>
+  <div>
+    <h1>SmartWaste System</h1>
+    <p>Intelligent waste collection and route optimization (C++ core with DSA and OOP) &mdash; version 5</p>
+  </div>
+  <div>
+    <button class="btn" onclick="runDemo()">Run Demo</button>
+    <select id="vehicleSelect" class="header-select"></select>
+    <button class="btn btn-main" onclick="planSmartRoute()">Generate Smart Route</button>
+  </div>
+</header>
+
+<!-- Summary cards -->
+<section class="cards">
+  <div class="card">
+    <p class="card-title">Total Bins</p>
+    <p class="card-value" id="totalBins">--</p>
+    <p class="card-note" id="pendingWaste">Pending: -- kg</p>
+  </div>
+  <div class="card">
+    <p class="card-title">Critical Bins (90% and above)</p>
+    <p class="card-value red" id="criticalBins">--</p>
+    <p class="card-note" id="highBins">High priority: --</p>
+  </div>
+  <div class="card">
+    <p class="card-title">Available Vehicles</p>
+    <p class="card-value green" id="availableVehicles">--</p>
+    <p class="card-note" id="trucksSent">No trip planned yet</p>
+  </div>
+  <div class="card">
+    <p class="card-title">Trips Completed</p>
+    <p class="card-value blue" id="completedTrips">--</p>
+    <p class="card-note">Distance saved is in the comparison tab</p>
+  </div>
+</section>
+
+<!-- Tabs -->
+<nav class="tabs">
+  <button class="tab active" onclick="showTab('tab-map', this)">Map and Route</button>
+  <button class="tab" onclick="showTab('tab-bins', this)">Bins</button>
+  <button class="tab" onclick="showTab('tab-vehicles', this)">Vehicles</button>
+  <button class="tab" onclick="showTab('tab-compare', this)">Fixed vs Smart</button>
+  <button class="tab" onclick="showTab('tab-tests', this)">Test Cases</button>
+</nav>
+
+<!-- TAB 1: map and re-routing -->
+<section id="tab-map" class="tab-page active">
+  <div class="split">
+
+    <div class="panel">
+      <h2>Road Network Graph</h2>
+      <p class="legend">
+        <span class="dot depot"></span> Depot
+        <span class="dot crit"></span> Critical
+        <span class="dot high"></span> High
+        <span class="dot ok"></span> Low / Medium
+        <span class="line route"></span> Planned trip
+        <span class="line blocked"></span> Blocked road
+      </p>
+      <canvas id="graphCanvas" width="780" height="480"></canvas>
+
+      <div class="map-buttons">
+        <button class="btn btn-main" onclick="playTrucks()">Start the Trucks</button>
+        <button class="btn" onclick="cancelTrucks()">Stop</button>
+      </div>
+      <p class="help" id="truckStatus">Plan the trips, then press Start the Trucks to watch them drive and empty the bins.</p>
+    </div>
+
+    <div class="panel">
+      <h2 id="tripsHeading">Planned Trips</h2>
+      <div id="routeList"></div>
+      <p class="msg" id="message"></p>
+      <button class="btn btn-green" onclick="collectWaste()">Run All Trips</button>
+      <p class="help">
+        Run All Trips empties the bins at once. Start the Trucks (under the map)
+        does the same thing, but lets you watch every truck drive to its bins first.
+      </p>
+
+      <h2>Block a Road</h2>
+      <p class="help">
+        The road is closed and Dijkstra is run again. If the active route used
+        that road, a new path around it is found automatically.
+      </p>
+      <div class="form-row">
+        <label>From
+          <select id="fromSelect"></select>
+        </label>
+        <label>To
+          <select id="toSelect"></select>
+        </label>
+      </div>
+      <button class="btn btn-red" onclick="blockRoad()">Block and Re-route</button>
+      <button class="btn" onclick="unblockRoad()">Open Road</button>
+      <button class="btn" onclick="resetData()">Reset Sample Data</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- TAB 2: bins -->
+<section id="tab-bins" class="tab-page">
+  <div class="panel">
+    <h2>Bins (stored in a linked list, ordered by a max heap)</h2>
+    <div class="panel-buttons">
+      <button class="btn" onclick="sortBins('fill')">Sort by Fill %</button>
+      <button class="btn" onclick="sortBins('priority')">Sort by Priority</button>
+      <button class="btn btn-main" onclick="addBin()">Add Bin</button>
+    </div>
+    <table id="binsTable">
+      <thead>
+        <tr>
+          <th>Bin ID</th><th>Location</th><th>Capacity</th><th>Waste</th>
+          <th>Fill Level</th><th>Priority</th><th>Status</th><th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- TAB 3: vehicles -->
+<section id="tab-vehicles" class="tab-page">
+  <div class="panel">
+    <h2>Vehicle Fleet (base class with two derived classes)</h2>
+    <table id="vehiclesTable">
+      <thead>
+        <tr>
+          <th>Vehicle ID</th><th>Type</th><th>Capacity</th><th>Effective Capacity</th>
+          <th>Loaded</th><th>Available</th><th>Location</th><th>Status</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- TAB 4: comparison -->
+<section id="tab-compare" class="tab-page">
+  <div class="panel">
+    <h2>Fixed Route vs Smart Plan</h2>
+    <p class="help">
+      The numbers below are calculated by the C++ program, not written in the
+      page. Press the button to run the comparison.
+    </p>
+    <button class="btn btn-main" onclick="runComparison()">Run Comparison</button>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>Metric</th><th>Fixed Route</th><th>Smart Route</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Travel distance</td><td id="cmpFixedDist">--</td><td id="cmpSmartDist">--</td></tr>
+        <tr><td>Travel time</td><td id="cmpFixedTime">--</td><td id="cmpSmartTime">--</td></tr>
+        <tr><td>Bins visited</td><td id="cmpFixedBins">--</td><td id="cmpSmartBins">--</td></tr>
+        <tr><td>Waste collected</td><td id="cmpFixedWaste">--</td><td id="cmpSmartWaste">--</td></tr>
+        <tr><td>Trucks used</td><td>1</td><td id="cmpSmartTrucks">--</td></tr>
+      </tbody>
+    </table>
+
+    <div class="savings">
+      <div><p class="big" id="savedDistance">--</p><p>Distance saved</p></div>
+      <div><p class="big" id="savedTime">--</p><p>Time saved</p></div>
+      <div><p class="big" id="savedFuel">--</p><p>Fuel saved</p></div>
+      <div><p class="big" id="savedPercent">--</p><p>Efficiency gain</p></div>
+    </div>
+
+    <p class="help">
+      The smart plan is shorter because it skips the bins that are not full
+      yet. Those bins are collected on a later day. The travel time is the
+      total of all the trucks, and in real life the trucks drive at the same
+      time, so the day would actually finish sooner.
+    </p>
+  </div>
+</section>
+
+<!-- TAB 5: tests -->
+<section id="tab-tests" class="tab-page">
+  <div class="panel">
+    <h2>Test Cases</h2>
+    <p class="help">
+      This runs the real test suite inside the C++ program and shows its output.
+    </p>
+    <button class="btn btn-main" onclick="runTests()">Run Tests</button>
+    <pre id="testOutput">Not run yet.</pre>
+  </div>
+</section>
+
+<script src="app.js?v=5"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+# From,To,Distance(km),Blocked,RoadName
+Depot,GEU Gate,3.5,0,North Link
+Depot,Main Road,4,0,Central Blvd
+Depot,Parking,2.8,0,Service Lane
+GEU Gate,Hostel,2.5,0,University Ave
+GEU Gate,Market,3,0,Commerce Way
+Main Road,Market,2.4,0,Market Express
+Main Road,Residential Area,4.2,0,South Avenue
+Parking,Academic Block,4.5,0,South Perimeter
+Hostel,Canteen,2,0,Campus Walk
+Hostel,Library,3.2,0,West Pathway
+Canteen,Library,1.8,0,Central Corridor
+Canteen,Academic Block,2.2,0,Science Walk
+Library,Academic Block,2.5,0,Faculty Road
+Academic Block,Sports Complex,3,0,Athletics Way
+Sports Complex,Residential Area,3.8,0,Ring Road
